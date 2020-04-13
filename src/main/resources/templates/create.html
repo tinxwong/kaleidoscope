@@ -1,0 +1,275 @@
+<div th:fragment="create_new">
+    <div class="layui-card layui-card-table-create" style="display: none;">
+
+        <div class="layui-card-header">表创建</div>
+        <div class="layui-card-body">
+            <div class="layui-collapse" lay-filter="component-panel" style="padding: 15px;">
+                <form class="layui-form" action="" lay-filter="component-form-group" onsubmit="return false;">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">表名：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="tablename" name="tablename" lay-verify="required"
+                                       autocomplete="off" placeholder="请输入表名" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">表注释：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="tablecomment" name="tablecomment" lay-verify="required"
+                                       autocomplete="off" placeholder="请输入表注释" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">存储引擎：</label>
+                            <div class="layui-input-inline">
+                                <select id="engine" name="engine" lay-verify="engine">
+                                    <option value="InnoDB" selected>InnoDB</option>
+                                    <option value="MRG_MYISAM">MRG_MYISAM</option>
+                                    <option value="MEMORY">MEMORY</option>
+                                    <option value="BLACKHOLE">BLACKHOLE</option>
+                                    <option value="MyISAM">MyISAM</option>
+                                    <option value="CSV">CSV</option>
+                                    <option value="ARCHIVE">ARCHIVE</option>
+                                    <option value="PERFORMANCE_SCHEMA">PERFORMANCE_SCHEMA</option>
+                                    <option value="FEDERATED">FEDERATED</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-card-body layui-row layui-col-space10">
+                            <div class="layui-col-md2">
+                                <input type="text" id="field" name="field" placeholder="字段名" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+
+                            <div class="layui-col-md2" style="text-align: center;">
+                                <div class="layui-inline">
+                                    <select id="fieldtype" name="fieldtype" lay-search="">
+                                        <option value="">直接选择或搜索选择类型</option>
+                                        <option value="TINYINT">TINYINT</option>
+                                        <option value="SMALLINT">SMALLINT</option>
+                                        <option value="MEDIUMINT">MEDIUMINT</option>
+                                        <option value="INT">INT</option>
+                                        <option value="BIGINT">BIGINT</option>
+                                        <option value="FLOAT">FLOAT</option>
+                                        <option value="DOUBLE">DOUBLE</option>
+                                        <option value="DECIMAL">DECIMAL</option>
+                                        <option value="DATE">DATE</option>
+                                        <option value="TIME">TIME</option>
+                                        <option value="YEAR">YEAR</option>
+                                        <option value="DATETIME">DATETIME</option>
+                                        <option value="TIMESTAMP">TIMESTAMP</option>
+                                        <option value="CHAR">CHAR</option>
+                                        <option value="VARCHAR">VARCHAR</option>
+                                        <option value="TINYBLOB">TINYBLOB</option>
+                                        <option value="TINYTEXT">TINYTEXT</option>
+                                        <option value="BLOB">BLOB</option>
+                                        <option value="TEXT">TEXT</option>
+                                        <option value="MEDIUMBLOB">MEDIUMBLOB</option>
+                                        <option value="MEDIUMTEXT">MEDIUMTEXT</option>
+                                        <option value="LONGBLOB">LONGBLOB</option>
+                                        <option value="LONGTEXT">LONGTEXT</option>
+                                        <option value="ENUM">ENUM</option>
+                                        <option value="SET">SET</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-col-md2">
+                                <input type="text" id="length" name="length" placeholder="长度或内容"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-col-md1">
+                                <input type="text" id="default" name="default" placeholder="默认值"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-col-md1">
+                                <select id="ifNull" name="ifNull" lay-verify="ifNull">
+                                    <option value="">为空
+                                    </option>
+                                    <option value="Y">是</option>
+                                    <option value="N">否</option>
+                                </select>
+                            </div>
+                            <div class="layui-col-md2">
+                                <input type="text" id="comment" name="comment" placeholder="注释"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-col-md1">
+                                <select id="ifid" name="ifid" lay-verify="ifid">
+                                    <option value="">主键
+                                    </option>
+                                    <option value="Y">是</option>
+                                    <option value="N">否</option>
+                                </select>
+                            </div>
+                            <div class="layui-col-md1">
+                                <div class="layui-inline">
+                                    <button class="layui-btn add-tr" lay-submit=""
+                                            lay-filter="component-form-demo1">添加
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="layui-fluid">
+                    <div class="layui-card">
+
+                        <div class="layui-card-body">
+                            <table class="layui-table">
+
+                                <tr>
+                                    <th class="th_width">字段名</th>
+                                    <th class="th_width">字段类型</th>
+                                    <th class="th_width">类型长度或内容</th>
+                                    <th class="th_width">默认值</th>
+                                    <th class="th_width">是否为空</th>
+                                    <th class="th_width">注释</th>
+                                    <th class="th_width" style="width:5%;">是否主键</th>
+                                    <th class="th_width" style="width:5%;">作为检索</th>
+                                    <th class="th_width" style="width:20%;">生成枚举类</th>
+                                    <th class="th_width" style="width:10%;">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="layui-tr-column">
+                                <tr class="layui-table-tr">
+                                    <td>id</td>
+                                    <td>INT</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>N</td>
+                                    <td>唯一标识</td>
+                                    <td>Y</td>
+                                    <td><input class="search_word" type="checkbox" data="id"></td>
+                                    <td class="enums" id="enums-id" data="id"></td>
+                                    <td>
+                                        <button class="layui-btn layui-btn-sm layui-btn-update"
+                                                onclick="updateTr(this)"><i class="layui-icon">&#xe642;</i>
+                                        </button>&nbsp;<button class="layui-btn layui-btn-sm layui-btn-save"
+                                                               onclick="saveTr(this)"><i class="layui-icon">&#xe605;</i>
+                                    </button>&nbsp;<button class="layui-btn layui-btn-danger layui-btn-sm"
+                                                           onclick="delTr(this)"><i
+                                            class="layui-icon">&#xe640;</i></button>
+                                    </td>
+                                </tr>
+                                <tr class="layui-table-tr">
+                                    <td>create_time</td>
+                                    <td>TIMESTAMP</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>N</td>
+                                    <td>创建时间</td>
+                                    <td></td>
+                                    <td><input class="search_word" type="checkbox" data="create_time"></td>
+                                    <td class="enums" id="enums-create_time" data="create_time"></td>
+                                    <td>
+                                        <button class="layui-btn layui-btn-sm layui-btn-update"
+                                                onclick="updateTr(this)"><i class="layui-icon">&#xe642;</i>
+                                        </button>&nbsp;<button class="layui-btn layui-btn-sm layui-btn-save"
+                                                               onclick="saveTr(this)"><i class="layui-icon">&#xe605;</i>
+                                    </button>&nbsp;<button class="layui-btn layui-btn-danger layui-btn-sm"
+                                                           onclick="delTr(this)"><i
+                                            class="layui-icon">&#xe640;</i></button>
+                                    </td>
+                                </tr>
+                                <tr class="layui-table-tr">
+                                    <td>create_user</td>
+                                    <td>CHAR</td>
+                                    <td>50</td>
+                                    <td></td>
+                                    <td>N</td>
+                                    <td>创建人</td>
+                                    <td></td>
+                                    <td><input class="search_word" type="checkbox" data="create_user"></td>
+                                    <td class="enums" id="enums-create_user" data="create_user"></td>
+                                    <td>
+                                        <button class="layui-btn layui-btn-sm layui-btn-update"
+                                                onclick="updateTr(this)"><i class="layui-icon">&#xe642;</i>
+                                        </button>&nbsp;<button class="layui-btn layui-btn-sm layui-btn-save"
+                                                               onclick="saveTr(this)"><i class="layui-icon">&#xe605;</i>
+                                    </button>&nbsp;<button class="layui-btn layui-btn-danger layui-btn-sm"
+                                                           onclick="delTr(this)"><i
+                                            class="layui-icon">&#xe640;</i></button>
+                                    </td>
+                                </tr>
+                                <tr class="layui-table-tr">
+                                    <td>update_time</td>
+                                    <td>TIMESTAMP</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>修改时间</td>
+                                    <td></td>
+                                    <td><input class="search_word" type="checkbox" data="update_time"></td>
+                                    <td class="enums" id="enums-update_time" data="update_time"></td>
+                                    <td>
+                                        <button class="layui-btn layui-btn-sm layui-btn-update"
+                                                onclick="updateTr(this)"><i class="layui-icon">&#xe642;</i>
+                                        </button>&nbsp;<button class="layui-btn layui-btn-sm layui-btn-save"
+                                                               onclick="saveTr(this)"><i class="layui-icon">&#xe605;</i>
+                                    </button>&nbsp;&nbsp;<button class="layui-btn layui-btn-danger layui-btn-sm"
+                                                                 onclick="delTr(this)"><i class="layui-icon">&#xe640;</i>
+                                    </button>
+                                    </td>
+                                </tr>
+                                <tr class="layui-table-tr">
+                                    <td>update_user</td>
+                                    <td>CHAR</td>
+                                    <td>50</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>修改人</td>
+                                    <td></td>
+                                    <td><input class="search_word" type="checkbox" data="update_user"></td>
+                                    <td class="enums" id="enums-update_user" data="update_user"></td>
+                                    <td>
+                                        <button class="layui-btn layui-btn-sm layui-btn-update"
+                                                onclick="updateTr(this)"><i class="layui-icon">&#xe642;</i>
+                                        </button>&nbsp;<button class="layui-btn layui-btn-sm layui-btn-save"
+                                                               onclick="saveTr(this)"><i class="layui-icon">&#xe605;</i>
+                                    </button>&nbsp;&nbsp;<button
+                                            class="layui-btn layui-btn-danger layui-btn-sm "
+                                            onclick="delTr(this)"><i class="layui-icon">&#xe640;</i></button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="layui-card-body layui-row layui-col-space10">
+                            <div class="layui-col-md12" style="text-align:center;">
+                                <button class="layui-btn parse-sql" lay-submit=""
+                                        lay-filter="component-form-element">转sql语句
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form class="layui-form layui-form-executeSQL" action="" lay-filter="component-form-group"
+              onsubmit="return false;">
+            <div class="layui-card-header">sql语句</div>
+            <input id="mydatabasename" name="databasename" type="hidden">
+            <input id="exe_tablename" name="tablename" type="hidden">
+            <div class="layui-card-body">
+                <div class="layui-collapse layui-sql-html" lay-filter="component-panel" style="padding: 15px;">
+                    <textarea style="width:100%;height:200px;" id="show-sql-area" name="sql"></textarea>
+                </div>
+            </div>
+            <div class="layui-card-body layui-row layui-col-space10">
+                <div class="layui-col-md12" style="text-align:center;">
+                    <button class="layui-btn execute-sql" lay-submit="" lay-filter="component-form-element">
+                        执行创建表
+                    </button>
+                    <button class="layui-btn generator-code" lay-submit="" lay-filter="component-form-element">
+                        生成代码
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>

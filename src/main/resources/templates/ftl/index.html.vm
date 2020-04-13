@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="includeforlay :: header"></head>
+<title>${table.comment}列表</title>
+<style>
+    .layui-stock-img{
+        cursor:pointer;
+        width:50%;
+    }
+
+    .layui-btn-mygroup{
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 0;
+    }
+</style>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row">
+                        <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+                            <div class="layui-btn-mygroup layui-btn-container layui-stock-table">
+                                <button class="layui-btn layui-btn-sm layui-btn-add" data-type="add">
+                                    <i class="layui-icon ">&#xe654;</i>添加
+                                </button>
+                                <button class="layui-btn layui-btn-danger layui-btn-sm" data-type="del">
+                                <i class="layui-icon">&#xe640;</i>删除
+                                </button>
+
+                            </div>
+                            <div class="layui-inline layui-${table.entityPath}-table" style="margin-bottom: 10px;float:right;">
+                                <div class="layui-inline">
+                                    <input class="layui-input" name="searchWord" id="searchWord" placeholder="请输入检索字段" value="" autocomplete="off">
+                                </div>
+                                <button type="button" class="layui-btn" data-type="search">搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="${table.entityPath}Table" lay-filter="${table.entityPath}Table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="includeforlay :: layuijs"></div>
+<script type="text/javascript" th:src="'/${cfg.root}/js/${table.entityPath}/index.js?_='"></script>
+<script type="text/html" id="${table.entityPath}Bar">
+    <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+</body>
+</html>

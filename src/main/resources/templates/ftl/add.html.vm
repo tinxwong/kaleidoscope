@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+<head th:include="includeforlay :: header"></head>
+<style>
+    .layui-input-div{
+        line-height:38px;
+    }
+</style>
+<body class="gray-bg">
+<div class="layui-fluid">
+    <div class="layui-card">
+        <form class="layui-form" action="" id="${table.entityPath}Form">
+            <div class="layui-tab layui-tab-brief" lay-filter="subcontentTab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" lay-id="infoTab">新增</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form" lay-filter="component-form-group">
+
+                            <div class="layui-row">
+
+                                #foreach($field in ${table.fields})
+                                    #if(!${field.keyFlag}&&"$field.propertyName"!="createTime"&&"$field.propertyName"!="createUser"&&"$field.propertyName"!="updateTime"&&"$field.propertyName"!="updateUser")##生成普通字段
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">${field.comment}</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="${field.propertyName}" name="${field.propertyName}" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required"/>
+                                            </div>
+                                        </div>
+                                    #end
+                                #end
+
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md8 ">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <button class="layui-btn" lay-submit lay-filter="${table.entityPath}-component-form">保存</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:include="includeforlay :: layuijs"></div>
+<script type="text/javascript" src="/${cfg.root}/js/${table.entityPath}/add.js">
+
+</script>
+
+</body>
+</html>

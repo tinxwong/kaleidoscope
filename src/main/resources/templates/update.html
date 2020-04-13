@@ -1,0 +1,131 @@
+<div th:fragment="update_table">
+    <div class="layui-card  layui-card-column-create" style="display: none;">
+        <div class="layui-card-header">
+            <div style="float:left;">请选择数据库的表</div>
+            <div style="float:left;margin-left:20px;"><select id="table-select"></select></div>
+            <div style="float:left;margin-left:20px;">
+                <button class="layui-btn delete-table" type="button">
+                    删除选中的表
+                </button>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div class="layui-collapse" lay-filter="component-panel" style="padding: 15px;">
+                <form class="layui-form" action="" lay-filter="component-form-group" onsubmit="return false;">
+                    <div class="layui-form-item">
+                        <div class="layui-card-body layui-row layui-col-space10">
+                            <div class="layui-col-md2">
+                                <input type="text" id="" name="name" placeholder="字段名"
+                                       autocomplete="off" class="layui-input col-name">
+                            </div>
+                            <div class="layui-col-md2" style="text-align: center;">
+                                <div class="layui-inline">
+                                    <select name="type" class="col-fieldtype" lay-search="">
+                                        <option value="">直接选择或搜索选择类型</option>
+                                        <option value="TINYINT">TINYINT</option>
+                                        <option value="SMALLINT">SMALLINT</option>
+                                        <option value="MEDIUMINT">MEDIUMINT</option>
+                                        <option value="INT">INT</option>
+                                        <option value="BIGINT">BIGINT</option>
+                                        <option value="FLOAT">FLOAT</option>
+                                        <option value="DOUBLE">DOUBLE</option>
+                                        <option value="DECIMAL">DECIMAL</option>
+                                        <option value="DATE">DATE</option>
+                                        <option value="TIME">TIME</option>
+                                        <option value="YEAR">YEAR</option>
+                                        <option value="DATETIME">DATETIME</option>
+                                        <option value="TIMESTAMP">TIMESTAMP</option>
+                                        <option value="CHAR">CHAR</option>
+                                        <option value="VARCHAR">VARCHAR</option>
+                                        <option value="TINYBLOB">TINYBLOB</option>
+                                        <option value="TINYTEXT">TINYTEXT</option>
+                                        <option value="BLOB">BLOB</option>
+                                        <option value="TEXT">TEXT</option>
+                                        <option value="MEDIUMBLOB">MEDIUMBLOB</option>
+                                        <option value="MEDIUMTEXT">MEDIUMTEXT</option>
+                                        <option value="LONGBLOB">LONGBLOB</option>
+                                        <option value="LONGTEXT">LONGTEXT</option>
+                                        <option value="ENUM">ENUM</option>
+                                        <option value="SET">SET</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-col-md2">
+                                <input type="text" name="length" placeholder="长度或内容"
+                                       autocomplete="off" class="layui-input col-length">
+                            </div>
+                            <div class="layui-col-md1">
+                                <input type="text" id="" name="dft" placeholder="默认值"
+                                       autocomplete="off" class="layui-input col-default">
+                            </div>
+                            <div class="layui-col-md1">
+                                <select id="col-ifNull" name="ifNull" lay-verify="ifNull" class="col-ifNull">
+                                    <option value="0">为空
+                                    </option>
+                                    <option value="0">是</option>
+                                    <option value="1">否</option>
+                                </select>
+                            </div>
+                            <div class="layui-col-md2">
+                                <input type="text" id="" name="comment" placeholder="注释"
+                                       autocomplete="off" class="layui-input col-comment">
+                            </div>
+                            <div class="layui-col-md1">
+                                <select id="col-after" name="after" lay-verify="order" class="col-after">
+                                </select>
+                            </div>
+                            <div class="layui-col-md1">
+                                <div class="layui-inline">
+                                    <button class="layui-btn layui-add-col">转SQL</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-card-body">
+                            <div class="layui-col-md11">
+                                <div class="layui-inline" style="width:100%;">
+                                    <input type="text" id="col-sql" name="col-sql" placeholder="添加字段的sql语句" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-col-md1">
+                                <div class="layui-inline" style="margin-left: 8px;">
+                                    <button class="layui-btn layui-exc-col">执行</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="layui-fluid">
+                    <div class="layui-card">
+
+                        <div class="layui-card-body">
+                            <table class="layui-table">
+
+                                <tr>
+                                    <th class="th_width">字段名</th>
+                                    <th class="th_width">字段类型</th>
+                                    <th class="th_width">类型长度或内容</th>
+                                    <th class="th_width">作为检索</th>
+                                    <th class="th_width">生成枚举类</th>
+                                    <th class="th_width">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="table-column">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="layui-card-body layui-row layui-col-space10">
+                            <div class="layui-col-md12" style="text-align:center;">
+                                <button class="layui-btn gen-column-code" type="button">生成代码
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,46 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Entity}.vo.${entity}Vo;
+import ${package.Entity}.query.${entity}Query;
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${entity}Service;
+import org.springframework.stereotype.Service;
+import com.xnew.common.abs.service.impl.XnewServiceImpl;
+import com.baomidou.mybatisplus.plugins.Page;
+#if($cfg.searchWord.size()>0)
+import com.xnew.common.response.ErrorCode;
+import com.xnew.db.utils.SqlAsserts;
+import java.util.ArrayList;
+import java.util.List;
+#end
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName} extends XnewServiceImpl<${entity}Vo,${table.mapperName},${entity}Query,${entity}> implements ${entity}Service {
+
+
+#if($cfg.searchWord.size()>0)
+    public Page<${entity}Vo> queryByPage(${entity}Query query) {
+        SqlAsserts.injection(query.getSearchWord(),ErrorCode.SEARCHWORD_ILLEGAL_CHARACTER);
+        List<String> orLike = new ArrayList<>();
+#foreach($!{li} in $!{cfg.searchWord})
+        orLike.add("$!{li}");
+#end
+        query.setOrLike(orLike);
+        return super.queryByPage(query);
+    }
+#end
+}
+#end

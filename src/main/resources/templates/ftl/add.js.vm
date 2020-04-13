@@ -1,0 +1,40 @@
+layui.config({
+    base: '/' //静态资源所在路径
+}).extend({
+    index: 'lib/index' //主入口模块
+}).use(['index', 'form', 'laydate'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,element = layui.element
+        ,layer = layui.layer
+        ,laydate = layui.laydate
+        ,form = layui.form;
+
+    var code = "";
+    var nextCode;
+    form.render(null, 'component-form-group');
+
+    /* 监听提交 */
+    form.on('submit(${table.entityPath}-component-form)', function(data){
+        $.ajax({
+            url: "./add",
+            type: "post",
+            data: data.field,
+            success: function (r) {
+                if(r.code==0&&r.data==true){
+                    parent.window.reLoad();
+                    layer.confirm("添加成功,是否继续添加？", { title:'提示'}, function(index){
+                        window.location.reload();
+                    },function(){
+                        parent.layer.closeAll();
+                    });
+
+                }else{
+                    layer.alert(r.msg);
+                }
+            }
+        });
+        return false;
+    });
+
+});

@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/style/admin.css" media="all">
+    <meta charset="UTF-8">
+    <title>数据表创建工具</title>
+    <style>
+
+        table {
+            border: 0px;
+            cellspacing: 1px;
+            border-color: grey;
+        }
+
+        table tr th {
+            background-color: #f2f2f2;
+            width: 17%;
+        }
+
+        .template_select {
+            border: 1px #e6e6e6 solid;
+            width: 150px;
+            height: 40px;
+        }
+
+        .template_select option {
+
+        }
+
+        .layui-btn-save {
+            display: none;
+        }
+
+        .th_width {
+            width: 10%;
+        }
+
+        #table-select {
+            border: 1px #e5e5e5 solid;
+            height: 30px;
+            width: 200px;
+        }
+        .search_word{
+            height:30px;
+            width:30px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">数据库链接</div>
+                <div class="layui-card-body">
+                    <div class="layui-collapse" lay-filter="component-panel" style="padding: 15px;">
+                        <form class="layui-form layui-form-connectionDB" action="" lay-filter="component-form-group"
+                              onsubmit="return false;">
+                            <input id="mytablename" name="tablename" type="hidden">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">链接状态：</label>
+                                    <div class="layui-input-inline connection-status">
+                                        <div style="color:red;">未连接</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">链接地址：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="url" name="url" autocomplete="off" class="layui-input"
+                                               value="127.0.0.1">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">库名：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="databasename" name="databasename"
+                                               lay-verify="databasename" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">端口：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="port" name="port" lay-verify="port" autocomplete="off"
+                                               class="layui-input" value="3306">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">用户名：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="user" name="user" lay-verify="user" autocomplete="off"
+                                               class="layui-input" value="root">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">密码：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="pwd" name="pwd" lay-verify="pwd" autocomplete="off"
+                                               class="layui-input" value="mysql123!@#">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">模块名：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="model" name="model" lay-verify="model" autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">创建人：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="creater" name="creater" lay-verify="creater"
+                                               autocomplete="off" class="layui-input" value="tinx">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <button class="layui-btn layui-btn-connection" lay-submit=""
+                                            lay-filter="component-form-demo1">链接
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="layui-collapse" lay-filter="component-panel" style="padding: 15px;">
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-create" type="button">创建数据库表</button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-history" type="button">加载数据库表</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:include="create :: create_new"></div>
+            <div th:include="update :: update_table"></div>
+
+
+        </div>
+    </div>
+</div>
+
+<div id="template-table" style="display:none;">
+    <div class="layui-select-title" id="template_select_filetype">
+        <select id="temp_fieldtype" name="fieldtype" class="field_type template_select">
+            <option value="">类型</option>
+            <option value="TINYINT">TINYINT</option>
+            <option value="SMALLINT">SMALLINT</option>
+            <option value="MEDIUMINT">MEDIUMINT</option>
+            <option value="INT">INT</option>
+            <option value="BIGINT">BIGINT</option>
+            <option value="FLOAT">FLOAT</option>
+            <option value="DOUBLE">DOUBLE</option>
+            <option value="DECIMAL">DECIMAL</option>
+            <option value="DATE">DATE</option>
+            <option value="TIME">TIME</option>
+            <option value="YEAR">YEAR</option>
+            <option value="DATETIME">DATETIME</option>
+            <option value="TIMESTAMP">TIMESTAMP</option>
+            <option value="CHAR">CHAR</option>
+            <option value="VARCHAR">VARCHAR</option>
+            <option value="TINYBLOB">TINYBLOB</option>
+            <option value="TINYTEXT">TINYTEXT</option>
+            <option value="BLOB">BLOB</option>
+            <option value="TEXT">TEXT</option>
+            <option value="MEDIUMBLOB">MEDIUMBLOB</option>
+            <option value="MEDIUMTEXT">MEDIUMTEXT</option>
+            <option value="LONGBLOB">LONGBLOB</option>
+            <option value="LONGTEXT">LONGTEXT</option>
+            <option value="ENUM">ENUM</option>
+            <option value="SET">SET</option>
+        </select>
+    </div>
+
+    <div class="layui-col-md1" id="template_select_ifNull">
+        <select name="ifNull" lay-verify="ifNull" class="if_null template_select">
+            <option value="">为空
+            </option>
+            <option value="Y">是</option>
+            <option value="N">否</option>
+        </select>
+    </div>
+
+    <div class="layui-col-md1" id="template_select_ifid">
+        <select name="ifid" lay-verify="ifid" class="if_id template_select">
+            <option value="">主键
+            </option>
+            <option value="Y">是</option>
+            <option value="N">否</option>
+        </select>
+    </div>
+</div>
+<script src="/layui/layui.js"></script>
+<script>
+    var $;
+    var i = 1;
+    layui.config({
+        base: '/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'cookie'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , element = layui.element
+            , form = layui.form;
+        var selectTableName = "";
+        init();
+
+        $(".add-tr").click(function () {
+            var field = "<td>" + $("#field").val() + "</td>";
+            var fieldtype = "<td>" + $("#fieldtype").val() + "</td>";
+            var length = "<td>" + $("#length").val() + "</td>";
+            var myDefault = "<td>" + $("#default").val() + "</td>";
+            var ifNull = "<td>" + $("#ifNull").val() + "</td>";
+            var comment = "<td>" + $("#comment").val() + "</td>";
+            var ifid = "<td>" + $("#ifid").val() + "</td>";
+            var searchword = "<td><input class=\"search_word\" type=\"checkbox\" data=\"" + $("#field").val() + "\"></td>";
+            var enums = "<td class=\"enums\" id=\"enums-" + $("#field").val() + "\" data=\"" + $("#field").val() + "\"></td>";
+            var oper = "<td><button class=\"layui-btn layui-btn-sm layui-btn-update\" onclick=\"updateTr(this)\"><i class=\"layui-icon\">&#xe642;</i></button>&nbsp;<button class=\"layui-btn layui-btn-sm layui-btn-save\" onclick=\"saveTr(this)\"><i class=\"layui-icon\">&#xe605;</i></button>&nbsp;&nbsp;<button class=\"layui-btn layui-btn-danger layui-btn-sm \" onclick=\"delTr(this)\"><i class=\"layui-icon\">&#xe640;</i></button></td>";
+            var trHtml = "<tr class='layui-table-tr'>" + field + fieldtype + length + myDefault + ifNull + comment + ifid + searchword + enums + oper + "</tr>";
+            // $(".layui-table").find("tbody").append(trHtml);
+            $('.layui-table tr:eq(' + i + ')').after(trHtml);
+            i++;
+        });
+
+        $(".parse-sql").click(function () {
+
+            parseSql();
+        });
+
+        $(".execute-sql").click(function () {
+            $("#mydatabasename").val($("#databasename").val());
+            $("#exe_tablename").val($("#tablename").val());
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: "/xnew/tools/createTable",
+                data: $('.layui-form-executeSQL').serialize(),// 你的formid
+                async: false,
+                error: function (request) {
+                    parent.layer.alert("Connection error");
+                },
+                success: function (res) {
+                    if (res.code == 0&&res.data==true) {
+                        parent.layer.msg("操作成功");
+
+                    } else {
+                        parent.layer.alert(data.msg)
+                    }
+
+                }
+            });
+        });
+
+        $(".layui-btn-connection").click(function () {
+            connectDB();
+        });
+
+        $(".generator-code").click(function () {
+            var sql = $("#show-sql-area").val();
+            if (sql == "") {
+                parseSql();
+                sql = $("#show-sql-area").val();
+            }
+            var params = $('.layui-form-connectionDB').serialize();
+            $("#mytablename").val($("#tablename").val());
+            var sw = "";
+            $("#layui-tr-column").find("tr").each(function () {
+                if ($(this).find(".search_word").is(':checked')) {
+                    var data = $(this).find(".search_word").attr("data");
+                    if (sw == "") {
+                        sw = data;
+                    } else {
+                        sw += "," + data;
+                    }
+                }
+            });
+            var enums = "";
+            var enumsType = "";
+            $("#layui-tr-column").find("tr").each(function () {
+                if ($(this).find(".enums").text() != "") {
+                    var data = $(this).find(".enums").attr("data");
+                    var text = $(this).find(".enums").text();
+                    if (enums == "") {
+                        enums = data;
+                    } else {
+                        enums += "," + data;
+                    }
+                    if (enumsType == "") {
+                        enumsType = data + "=" + text;
+                    } else {
+                        enumsType += "," + data + "=" + text;
+                    }
+
+                }
+            });
+            params += "&sql=" + sql + "&sw=" + sw + "&enums=" + enums + "&enumsType=" + enumsType;
+            alert(params);
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: "/xnew/tools/genCode",
+                data: params,// 你的formid
+                async: false,
+                error: function (request) {
+                    parent.layer.alert("Connection error");
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        $(".connection-status").html("<div style=\"color:blue;\">已连接</div>");
+                    }
+
+                }
+            });
+        });
+
+        /**
+         *刷新页面执行的函数
+         **/
+        function init() {
+            $("#url").val($.cookie("url"));
+            $("#databasename").val(typeof ($.cookie("databasename")) == "undefined" ? "xnew" : $.cookie("databasename"));
+            $("#port").val(typeof ($.cookie("port")) == "undefined" ? "3306" : $.cookie("port"));
+            $("#user").val(typeof ($.cookie("user")) == "undefined" ? "root" : $.cookie("user"));
+            $("#pwd").val($.cookie("pwd"));
+            $("#model").val($.cookie("model"));
+            $("#creater").val($.cookie("creater"));
+            connectDB();
+        }
+
+        function saveCookie() {
+            $(".layui-form-connectionDB").find("input").each(function () {
+                var key = $(this).attr("name");
+                var value = $(this).val();
+                $.cookie(key, value);
+            });
+
+        }
+
+        function parseSql() {
+            var tablename = $("#tablename").val();
+
+            if ($.trim(tablename) == "") {
+                $("#tablename").css("border", "1px red solid;");
+                layer.alert('请填写表名！');
+                return;
+            }
+            var tablecomment = $("#tablecomment").val();
+
+            var primaryKey = "PRIMARY KEY (`%s`)";
+            var sql = "create table `" + tablename + "`(\n";
+            $("#layui-tr-column tr").each(function (i) {
+
+                var fieldSql = "";
+                var field = $(this).find("td").eq(0).text();
+                var fieldtype = $(this).find("td").eq(1).text();
+                var typelength = $(this).find("td").eq(2).text();
+                var mydefault = $(this).find("td").eq(3).text();
+                var ifNull = $(this).find("td").eq(4).text();
+                var comment = $(this).find("td").eq(5).text();
+                var ifId = $(this).find("td").eq(6).text();
+
+                fieldSql += "`" + field + "`";
+                if ($.trim(typelength) == "") {
+                    fieldSql += " " + fieldtype;
+                } else {
+                    fieldSql += " " + fieldtype + "(" + typelength + ")";
+                }
+                if ($.trim(mydefault) != "") {
+
+                    fieldSql += " DEFAULT " + mydefault;
+                }
+
+                if ("Y" == ifId) {
+                    fieldSql += " UNSIGNED";
+                }
+
+                if ($.trim(ifNull) == "" || $.trim(ifNull) == "Y") {
+                    fieldSql += " NULL";
+                } else {
+                    fieldSql += " NOT NULL";
+                }
+
+                if ("Y" == ifId) {
+                    fieldSql += "  AUTO_INCREMENT";
+                    primaryKey = primaryKey.replace("%s", field);
+                }
+                if ($.trim(comment) != "") {
+                    fieldSql += " comment '" + comment + "',";
+                }
+                sql += fieldSql + "\n";
+            });
+            sql += primaryKey + "\n";
+            var engine = $("#engine").val();
+            sql += ")ENGINE=" + engine + " DEFAULT CHARSET=utf8";
+            if ($.trim(tablecomment) != "") {
+                sql += " COMMENT='" + tablecomment + "';";
+            }
+            $("#show-sql-area").val(sql);
+        }
+
+        function connectDB() {
+
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: "/xnew/tools/connect",
+                data: $('.layui-form-connectionDB').serialize(),// 你的formid
+                async: false,
+                error: function (request) {
+                    parent.layer.alert("Connection error");
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        $(".connection-status").html("<div style=\"color:blue;\">已连接</div>");
+                    }
+                    saveCookie();
+                }
+            });
+        }
+
+        $(document).on("click", ".layui-btn-create", function () {
+            $(".layui-card-table-create").show();
+            $(".layui-card-column-create").hide();
+        });
+
+        $(document).on("click", ".layui-btn-history", function () {
+            $(".layui-card-table-create").hide();
+            $(".layui-card-column-create").show();
+            var databasename = $("#databasename").val();
+            $.ajax({
+                cache: true,
+                type: "get",
+                url: "/xnew/tools/getAllTable",
+                data: {"databasename": databasename},// 你的formid
+                async: false,
+                error: function (res) {
+                    alert(JSON.stringify(res));
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+                        var html = "<option>---请选择表---</option>";
+                        var obj = res.data;
+                        for (var i = 0; i < obj.length; i++) {
+                            html += "<option style='height:30px;' value='" + obj[i] + "'>" + obj[i] + "</option>"
+                        }
+                        $("#table-select").html(html);
+                    }
+                }
+            });
+        });
+
+
+        $(document).on("click", ".layui-card-table-create .enums", function () {
+            var id = $(this).attr('id');
+            addOpen = layer.open({
+                type: 1,
+                title: '枚举类属性',
+                maxmin: true,
+                shadeClose: false, // 点击遮罩关闭层
+                area: ['50%', '50%'],
+                content: AddEnumHtmlContent(id) // iframe的url
+            });
+            var content = $(this).text();
+            parseEnum(content);
+        });
+
+        /**
+         * 生成代码
+         **/
+        $(document).on("click",".gen-column-code",function () {
+            $("#mytablename").val(selectTableName);
+            var params = $('.layui-form-connectionDB').serialize();
+
+            var sw = "";
+            $("#table-column").find("tr").each(function () {
+                if ($(this).find(".search_word").is(':checked')) {
+                    var data = $(this).find(".search_word").attr("data");
+                    if (sw == "") {
+                        sw = data;
+                    } else {
+                        sw += "," + data;
+                    }
+                }
+            });
+            var enums = "";
+            var enumsType = "";
+            $("#table-column").find("tr").each(function () {
+                if ($(this).find(".enums").text() != "") {
+                    var data = $(this).find(".enums").attr("data");
+                    var text = $(this).find(".enums").text();
+                    if (enums == "") {
+                        enums = data;
+                    } else {
+                        enums += "," + data;
+                    }
+                    if (enumsType == "") {
+                        enumsType = data + "=" + text;
+                    } else {
+                        enumsType += "," + data + "=" + text;
+                    }
+
+                }
+            });
+            params += "&sql=&sw=" + sw + "&enums=" + enums + "&enumsType=" + enumsType;
+            alert(params);
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: "/xnew/tools/genCode",
+                data: params,// 你的formid
+                async: false,
+                error: function (request) {
+                    parent.layer.alert("Connection error");
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        $(".connection-status").html("<div style=\"color:blue;\">已连接</div>");
+                    }
+
+                }
+            });
+        })
+
+        $(document).on("click", ".layui-card-column-create .enums", function () {
+            var id = $(this).attr('id');
+            addOpen = layer.open({
+                type: 1,
+                title: '枚举类属性',
+                maxmin: true,
+                shadeClose: false, // 点击遮罩关闭层
+                area: ['50%', '50%'],
+                content: AddEnumHtmlContent(id) // iframe的url
+            });
+            var content = $(this).text();
+            parseEnum(content);
+        });
+
+        /**
+         * 填充枚举类的属性到对应的tb中
+         **/
+        function parseEnum(content) {
+            if (content != "") {
+                var contents = content.split("%2B");
+                for (var i = 0; i < contents.length; i++) {
+                    var con = contents[i];
+                    var cons = con.split("|");
+                    var html = "<div class=\"layui-card-body layui-row layui-col-space10 layui-enums-content\" style='border-bottom:1px #ccc solid;'>" +
+                        "<div class=\"layui-col-md4 enums-class-value\">" +
+                        cons[0] +
+                        "</div>" +
+                        "<div class=\"layui-col-md3 enums-code-value\">" +
+                        cons[1] +
+                        "</div>" +
+                        "<div class=\"layui-col-md4 enums-name-value\">" +
+                        cons[2] +
+                        "</div>" +
+                        "<div class=\"layui-col-md1\">" +
+                        "<button class=\"layui-btn layui-btn-danger layui-btn-sm \" onclick=\"delEnumsTr(this)\"><i class=\"layui-icon\">&#xe640;</i></button>" +
+                        "</div>" +
+                        "</div>";
+                    $(".layui-enums").append(html);
+                }
+            }
+        }
+
+        /**
+         *枚举类的属性编辑页面
+         **/
+        function AddEnumHtmlContent(id) {
+            var html = "<div class=\"layui-form-item  layui-enums\">" +
+                "<div class=\"layui-card-body layui-row layui-col-space10\">" +
+                "<div class=\"layui-col-md4\">" +
+                "<input id=\"oldPwd\" name=\"oldPwd\" placeholder=\"枚举类型\" autocomplete=\"off\" class=\"layui-input enums-class\">" +
+                "</div>" +
+                "<div class=\"layui-col-md3\">" +
+                "<input id=\"oldPwd\" name=\"oldPwd\" placeholder=\"枚举代码（code）\" autocomplete=\"off\" class=\"layui-input enums-code\">" +
+                "</div>" +
+                "<div class=\"layui-col-md4\">" +
+                "<input id=\"oldPwd\" name=\"oldPwd\" placeholder=\"枚举名称（name）\" autocomplete=\"off\" class=\"layui-input enums-name\">" +
+                "</div>" +
+                "<div class=\"layui-col-md1\">" +
+                "<div class=\"layui-inline\"><button class=\"layui-btn add-enums-tr layui-btn-sm\">添加</button></div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "<div class=\"layui-form-item\">" +
+                "<div class=\"layui-card-body layui-row layui-col-space10\">" +
+                "<div class=\"layui-col-md12\" style='text-align: center;'>" +
+                "<button class=\"layui-btn make-sure-enums\" data='" + id + "'>确认</button>" +
+                "</div>" +
+                "</div>" +
+                "</div>";
+            return html;
+        }
+
+        $(document).on("click", ".make-sure-enums", function () {
+            var content = "";
+            $(".layui-enums").find(".layui-enums-content").each(function () {
+                var clsValue = $(this).find(".enums-class-value").text();
+                var codeValue = $(this).find(".enums-code-value").text();
+                var nameValue = $(this).find(".enums-name-value").text();
+                if (content == "") {
+                    content = clsValue + "|" + codeValue + "|" + nameValue;
+                } else {
+                    content += "%2B" + clsValue + "|" + codeValue + "|" + nameValue;
+                }
+            });
+            var id = $(this).attr("data");
+            $("#" + id).text(content);
+            parent.layer.closeAll();
+        });
+        $(document).on("click", ".add-enums-tr", function () {
+            var enumsClass = $(".enums-class").val();
+            var enumsCode = $(".enums-code").val();
+            var enumsName = $(".enums-name").val();
+            var html = "<div class=\"layui-card-body layui-row layui-col-space10 layui-enums-content\" style='border-bottom:1px #ccc solid;'>" +
+                "<div class=\"layui-col-md4 enums-class-value\">" +
+                enumsClass +
+                "</div>" +
+                "<div class=\"layui-col-md3 enums-code-value\">" +
+                enumsCode +
+                "</div>" +
+                "<div class=\"layui-col-md4 enums-name-value\">" +
+                enumsName +
+                "</div>" +
+                "<div class=\"layui-col-md1\">" +
+                "<button class=\"layui-btn layui-btn-danger layui-btn-sm \" onclick=\"delEnumsTr(this)\"><i class=\"layui-icon\">&#xe640;</i></button>" +
+                "</div>" +
+                "</div>";
+            $(".layui-enums").append(html);
+        });
+
+        /**
+         * 为表添加字段，转为sql
+         */
+        $(document).on("click",".layui-add-col",function () {
+            if(selectTableName==""){
+                layer.alert("请选择数据表！");
+                return;
+            }
+            addColumnSql(this);
+        });
+        /**
+         * 为数据表添加字段
+         **/
+        $(document).on("click",".layui-exc-col",function(){
+            var databaseName = $("#databasename").val();
+            var sql = $("#col-sql").val();
+            if(sql==''){
+                layer.alert("SQL语句为空！");
+                return;
+            }
+            $.ajax({
+                cache: true,
+                type: "post",
+                url: "/xnew/tools/addTableColumnBySql",
+                data: {"databaseName":databaseName,"tableName":selectTableName,"sql":sql},// 你的formid
+                async: false,
+                error: function (res) {
+                    alert(JSON.stringify(res));
+                },
+                success: function (res) {
+                    if (res.code == 0&&res.data==true) {
+                        var index = layer.alert('添加成功！', {
+                            skin: 'layui-layer-molv' //样式类名
+                            ,closeBtn: 0
+                        }, function(){
+                            loadTableColumn(selectTableName);
+                            layer.close(index);
+                        });
+                    }
+                }
+            });
+        });
+
+        /**
+         * 删除数据表的字段
+         **/
+        $(document).on("click",".layui-btn-column",function(){
+            var databaseName = $("#databasename").val();
+            var column = $(this).closest("tr").find(".column-field-name").text();
+            layer.confirm('真的删除字段么？',function () {
+                $.ajax({
+                    cache: true,
+                    type: "post",
+                    url: "/xnew/tools/dropTableColumn",
+                    data: {"databaseName":databaseName,"tableName":selectTableName,"column":column},// 你的formid
+                    async: false,
+                    error: function (res) {
+                        alert(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        if (res.code == 0&&res.data==true) {
+                            var index = layer.alert('删除成功！', {
+                                skin: 'layui-layer-molv' //样式类名
+                                ,closeBtn: 0
+                            }, function(){
+                                loadTableColumn(selectTableName);
+                                layer.close(index);
+                            });
+                        }
+                    }
+                });
+            })
+
+        });
+
+        /**
+         * 添加表字段的sql语句
+         */
+        function addColumnSql(obj){
+            var $form = $(obj).closest("form");
+            var sql = "alter table "+selectTableName+" add column "+$form.find(".col-name").val();
+            var type = $form.find(".col-fieldtype").val();
+            var length = $form.find(".col-length").val();
+            var comment = $form.find(".col-comment").val();
+            var dft = $form.find(".col-default").val();
+            var after = $form.find(".col-after").val();
+            var ifNull = $form.find(".col-ifNull").val();
+
+
+            if(length!=""){
+                type = type+"("+length+")";
+            }
+            sql += " "+type;
+            if(dft!=""){
+                sql += " default "+dft;
+            }else{
+                if(ifNull==0){
+                    sql += " default null";
+                }else{
+                    sql += " not null";
+                }
+
+            }
+            if(comment!=""){
+                sql += " comment '"+comment+"'";
+            }
+            if(after!=""&&after!="排位"){
+                sql += " after "+after;
+            }
+            $("#col-sql").val(sql);
+        }
+
+        $(document).on("change", "#table-select", function () {
+            selectTableName = $(this).val();
+            loadTableColumn(selectTableName);
+        });
+
+        /**
+         * 加载选中表的字段
+         * @param selectTableName
+         */
+        function loadTableColumn(selectTableName){
+            var databasename = $("#databasename").val();
+            $.ajax({
+                cache: true,
+                type: "get",
+                url: "/xnew/tools/getTableColumn",
+                data: {"databasename": databasename, "tablename": selectTableName},// 你的formid
+                async: false,
+                error: function (res) {
+                    alert(JSON.stringify(res));
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+                        var html = "";
+                        var field = "<option>排位</option>";
+                        var obj = res.data;
+                        for (var i = 0; i < obj.length; i++) {
+                            var data = obj[i];
+                            field += "<option>" + data.name + "</option>"
+                            html += "<tr>" +
+                                "<td class=\"th_width column-field-name\">" + data.name + "</td>" +
+                                "<td class=\"th_width\">" + data.type + "</td>" +
+                                "<td class=\"th_width\">" + data.length + "</td>" +
+                                "<td><input class=\"search_word\" type=\"checkbox\" data=\"" + data.name + "\"></td>" +
+                                "<td class=\"enums\" id=\"column-enums-" + data.name + "\" data=\"" + data.name + "\"></td>" +
+                                "<td class=\"th_width\"><button class=\"layui-btn layui-btn-sm layui-btn-update\" onclick=\"updateTr(this)\"><i class=\"layui-icon\">&#xe642;</i></button>&nbsp;<button class=\"layui-btn layui-btn-sm layui-btn-save\" onclick=\"saveTr(this)\"><i class=\"layui-icon\">&#xe605;</i></button>&nbsp;&nbsp;<button class=\"layui-btn layui-btn-danger layui-btn-sm layui-btn-column\"><i class=\"layui-icon\">&#xe640;</i></button></td>" +
+                                "</tr>"
+                        }
+                        $("#col-after").html(field);
+                        form.render();
+                        $("#table-column").html(html);
+                    }
+                }
+            });
+        }
+
+        $(document).on("click",".delete-table",function () {
+            if(selectTableName==""){
+                layer.alert("请选择要删除的表！");
+                return;
+            }
+            layer.confirm('真的删除数据表么？',function () {
+                var databaseName = $("#databasename").val();
+                $.ajax({
+                    cache: true,
+                    type: "post",
+                    url: "/xnew/tools/dropTable",
+                    data: {"databaseName":databaseName,"tableName":selectTableName},// 你的formid
+                    async: false,
+                    error: function (res) {
+                        alert(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        if (res.code == 0&&res.data==true) {
+                            var index = layer.alert('删除成功！', {
+                                skin: 'layui-layer-molv' //样式类名
+                                ,closeBtn: 0
+                            }, function(){
+                                loadTableColumn(selectTableName);
+                                layer.close(index);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    });
+
+    function delTr(obj) {
+        layui.$(obj).parents(".layui-table-tr").remove();
+    }
+
+    function updateTr(obj) {
+        var tds = layui.$(obj).parents(".layui-table-tr").find("td");
+        var field = tds.eq(0).text();
+        tds.eq(0).html("<input type=\"text\" id=\"field\" name=\"field\" placeholder=\"字段名\" autocomplete=\"off\" class=\"layui-input\" value='" + field + "'>");
+        var fieldtype = tds.eq(1).text();
+        // layui.$("#temp_fieldtype").val(fieldtype);
+        tds.eq(1).html(layui.$("#template_select_filetype").html());
+        tds.eq(1).find(".template_select").val(fieldtype);
+        var fieldlength = tds.eq(2).text();
+        tds.eq(2).html("<input type=\"text\" id=\"length\" name=\"length\" placeholder=\"长度或内容\" autocomplete=\"off\" class=\"layui-input\" value='" + fieldlength + "'>");
+
+        var fieldlength = tds.eq(3).text();
+        tds.eq(3).html("<input type='text' class='layui-input' value='" + fieldlength + "'>");
+
+        var ifNull = tds.eq(4).text();
+        tds.eq(4).html(layui.$("#template_select_ifNull").html());
+        tds.eq(4).find(".template_select").val(ifNull);
+
+        var comment = tds.eq(5).text();
+        tds.eq(5).html("<input type='text' class='layui-input' value='" + comment + "'>");
+
+        var ifid = tds.eq(6).text();
+        tds.eq(6).html(layui.$("#template_select_ifid").html());
+        tds.eq(6).find(".template_select").val(ifid);
+
+        tds.eq(9).find(".layui-btn-update").hide();
+        tds.eq(9).find(".layui-btn-save").show();
+    }
+
+    function saveTr(obj) {
+        var tbs = layui.$(obj).parents(".layui-table-tr").find("td");
+        tbs.each(function () {
+
+            if (layui.$(this).find("input[type='text']").length > 0) {
+                layui.$(this).text(layui.$(this).find("input").val());
+            }
+            if (layui.$(this).find("select").length > 0) {
+                layui.$(this).text(layui.$(this).find("select").val());
+            }
+        });
+
+        layui.$(obj).parents("td").find(".layui-btn-update").show();
+        layui.$(obj).parents("td").find(".layui-btn-save").hide();
+    }
+
+    function delEnumsTr(obj) {
+        layui.$(obj).closest(".layui-col-space10").remove();
+    }
+</script>
+</body>
+</html>

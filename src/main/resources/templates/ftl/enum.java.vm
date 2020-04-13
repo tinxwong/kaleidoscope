@@ -1,0 +1,72 @@
+package ${cfg.pkg}.enums;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
+public enum ${cfg.enumName} {
+
+#if($cfg.types.size()>0)
+
+    #foreach($!{li} in $!{cfg.types})
+        #if($velocityCount<${cfg.types.size()})
+        ${li.split("[|]")[0]}(${li.split("[|]")[1]},"${li.split("[|]")[2]}"),
+        #end
+        #if($velocityCount==${cfg.types.size()})
+        ${li.split("[|]")[0]}(${li.split("[|]")[1]},"${li.split("[|]")[2]}");
+        #end
+    #end
+#end
+
+    ${cfg.enumName}(int code, String name){
+        this.code = code;
+        this.name = name;
+        }
+
+
+    private int code;
+
+    private String name;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public static Integer getCode(String name){
+        for(${cfg.enumName} enums: ${cfg.enumName}.values()){
+            if(enums.getName().equals(name)){
+                return enums.getCode();
+            }
+        }
+        return null;
+    }
+
+    public static String getName(int code){
+        for(${cfg.enumName} enums: ${cfg.enumName}.values()){
+            if(code == enums.getCode()){
+                return enums.getName();
+            }
+        }
+        return "";
+    }
+
+    public static Map<Integer,String> toMap(){
+        Map<Integer,String> map = new HashMap<>();
+        for(${cfg.enumName} enums:${cfg.enumName}.values()){
+            map.put(enums.getCode(),enums.getName());
+        }
+        return map;
+    }
+}

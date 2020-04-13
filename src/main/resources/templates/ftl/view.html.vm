@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+<head th:include="includeforlay :: header"></head>
+<style>
+    .layui-input-div{
+        line-height:38px;
+    }
+    .layui-div-value{
+        padding-top:8px;padding-left:5px;height:25px;line-height:25px;
+    }
+</style>
+<body class="gray-bg">
+<div class="layui-fluid">
+    <div class="layui-card">
+        <form class="layui-form" action="" id="${table.entityPath}Form">
+            <div class="layui-tab layui-tab-brief" lay-filter="subcontentTab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" lay-id="infoTab">详情</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form" lay-filter="component-form-group" th:object="${object}">
+                            <input id="objectId" name="id" value="" th:value="*{id}" type="hidden">
+                            <div class="layui-row">
+                                #foreach($field in ${table.fields})
+                                    #if(${field.keyIdentityFlag})
+                                        <div class="layui-form-item" style="display: none;">
+                                            <label class="layui-form-label">${field.comment}</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="${field.propertyName}" name="${field.propertyName}" class="layui-input" lay-verify="required" th:value="*{${field.propertyName}}" readonly/>
+                                            </div>
+                                        </div>
+                                    #else
+                                        #if(!${field.keyFlag}&&"$field.propertyName"!="createTime"&&"$field.propertyName"!="createUser"&&"$field.propertyName"!="updateTime"&&"$field.propertyName"!="updateUser")##生成普通字段
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">${field.comment}</label>
+                                            <div class="layui-input-block">
+                                                <div class="layui-div-value" th:text="*{${field.propertyName}}"></div>
+                                            </div>
+                                        </div>
+                                        #end
+                                    #end
+                                #end
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <div class="layui-row">
+                            <div class="layui-col-md12 ">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button type='button' class="layui-btn" onclick="go()">编辑
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:include="includeforlay :: layuijs"></div>
+</body>
+</html>
+<script>
+    function go(){
+        var id = document.getElementById("objectId").value;
+        window.location='./edit?id='+id;
+    }
+</script>

@@ -1,0 +1,53 @@
+package ${package.Entity}.vo;
+
+import lombok.Data;
+import com.xnew.common.entity.BaseVo;
+#if($cfg.enums.size()>0)
+    #foreach($!{li} in $!{cfg.enums})
+import ${cfg.pkg}.enums.${entity}$!{li}Enum;
+    #end
+#end
+
+
+/**
+ * <p>
+ * $!{table.comment}
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Data
+public class ${entity}Vo extends BaseVo {
+
+    private static final long serialVersionUID = 1L;
+
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in ${table.fields})
+
+#if("$field.propertyName"=="createTime"||"$field.propertyName"=="createUser"||"$field.propertyName"=="updateTime"||"$field.propertyName"=="updateUser")
+#else
+#if(!${field.keyFlag})
+#if("$!field.comment" != "")
+    /**
+     * ${field.comment}
+     */
+#end
+#if("$field.propertyType"=="Date")
+    @JsonFormat(
+        pattern = "yyyy-MM-dd HH:mm:ss",
+            timezone = "GMT+8"
+    )
+#end
+private ${field.propertyType} ${field.propertyName};
+#end
+#end
+#end
+#if($cfg.enums.size()>0)
+    #foreach($!{li} in $!{cfg.enums})
+        public String get$!{li}Desc(){
+            return ${entity}$!{li}Enum.getName(this.${cfg.enumMap.get("$!{li}")});
+        }
+    #end
+#end
+}

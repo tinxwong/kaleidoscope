@@ -1,0 +1,18 @@
+package ${package.Entity}.query;
+
+import lombok.Data;
+import com.xnew.common.entity.BaseQuery;
+
+
+/**
+ * <p>
+ * $!{table.comment}
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Data
+public class ${entity}Query extends BaseQuery {
+
+}

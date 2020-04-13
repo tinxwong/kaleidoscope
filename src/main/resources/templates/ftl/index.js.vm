@@ -1,0 +1,132 @@
+var tablename = "${table.entityPath}Table";
+layui.use(['laydate','table'], function(){
+    var table = layui.table,laydate = layui.laydate;
+
+    //方法级渲染
+    table.render({
+        elem: '#'+tablename
+        ,url: './listByPage'
+        ,cellMinWidth: 80
+        ,cols: [[
+            {title:'序号',checkbox: true, fixed: true}
+            #foreach($field in ${table.fields})
+                #if("$field.propertyName"=="createTime"||"$field.propertyName"=="updateTime"||"$field.propertyName"=="createUser"||"$field.propertyName"=="updateUser")##生成普通字段
+                    ,{title: '${field.comment}', field: '${field.propertyName}', sort: false, width:100,hide:true}
+                #else
+                    ,{title: '${field.comment}', field: '${field.propertyName}', sort: false, width:100}
+                #end
+            #end
+            ,{ fixed: 'right',title: '操作',align: 'center',width:120, toolbar: '#${table.entityPath}Bar'}
+        ]]
+        ,id: tablename
+        ,page: true
+        ,height: 415
+    });
+
+    var $ = layui.$, active = {
+        add:function(){
+            var addOpen = layer.open({
+                type: 2,
+                title: '增加',
+                maxmin: true,
+                shadeClose: false, // 点击遮罩关闭层
+                area: ['100%', '100%'],
+                content: './add' // iframe的url
+            });
+            layer.full(addOpen);
+        },
+        del:function(){
+            var ids = [];
+            var checkStatus = table.checkStatus(tablename),data = checkStatus.data;
+            if(data==''){
+                layer.msg("请选择要删除的行！",{icon:2});
+                return;
+            }
+            layer.confirm('真的删除行么', function(index){
+                for(var i = 0; i < data.length; i++){
+                    ids.push(data[i].id);
+                }
+                $.post('./batchDelete',{'ids':ids},function(data){
+                    if (data == "0")
+                        layer.alert("删除失败！");
+                    else {
+                        layer.alert("删除成功！",{icon:1},function(){window.location='./index';});
+                    }
+                });
+            });
+        },
+        reload: function(){
+            // var demoReload = $('#demoReload');
+
+            //执行重载
+            table.reload(tablename, {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                ,where: {
+                    key: {
+                        // id: demoReload.val()
+                    }
+                }
+            });
+        },
+        search: function(){
+            var searchWord = $('#searchWord').val();
+            //执行重载
+            table.reload(tablename, {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                ,where: {
+                    searchWord: searchWord
+                }
+            });
+        }
+    };
+
+    //监听行工具事件
+    table.on('tool('+tablename+')', function(obj){
+        var data = obj.data;
+        // console.log(obj)
+        if(obj.event === 'del'){
+            layer.confirm('真的删除行么', function(index){
+                $.ajax({
+                    url: "./deleteById",
+                    type: "post",
+                    data: {"id":data.id},
+                    success: function (r) {
+                        if(r.code==0){
+                            obj.del();
+                            layer.close(index);
+                        }
+                    }
+                });
+
+            });
+        } else if(obj.event === 'view'){
+            var viewOpen = layer.open({
+                type: 2,
+                title: '查看',
+                maxmin: true,
+                shadeClose: false, // 点击遮罩关闭层
+                area: ['70%', '80%'],
+                content: './view?id='+data.id // iframe的url
+            });
+            // layer.full(viewOpen);
+        }
+    });
+
+    $('.LAY-app-message-btns .layui-btn').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+
+
+});
+
+function reLoad() {
+    // console.log("tablename",tablename);
+    layui.table.reload(tablename);
+}
+
+

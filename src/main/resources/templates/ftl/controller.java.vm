@@ -1,0 +1,46 @@
+package ${package.Controller};
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.xnew.common.abs.controller.XnewAbstractController;
+import ${package.Service}.${entity}Service;
+import ${package.Entity}.vo.${entity}Vo;
+import ${package.Entity}.query.${entity}Query;
+import com.xnew.common.abs.service.XnewService;
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@RestController
+@RequestMapping("#if(${cfg.root})/${cfg.root}#end#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+public class ${table.controllerName} extends XnewAbstractController<${entity}Vo,${entity}Query>{
+
+    @Autowired
+    private ${entity}Service ${table.entityPath}Service;
+
+    public String getPath() {
+        return "${cfg.root}/${table.entityPath}";
+    }
+
+    @Override
+    public XnewService getXnewService() {
+        return ${table.entityPath}Service;
+    }
+
+}
+
+#end

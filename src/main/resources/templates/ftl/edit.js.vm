@@ -1,0 +1,43 @@
+layui.config({
+    base: '/' //静态资源所在路径
+}).extend({
+    index: 'lib/index' //主入口模块
+}).use(['index', 'form'], function(){
+    var $ = layui.$, form = layui.form;
+
+    /* 监听提交 */
+    $(".layui-btn-edit").on("click",function () {
+        layer.alert('您确定要提交修改的内容?', {
+            skin: 'layui-layer-molv' //样式类名 自定义样式
+            , closeBtn: 1 // 是否显示关闭按钮
+            , anim: 1 //动画类型
+            , btn: ['确定', '取消'] //按钮
+            , icon: 6 // icon
+            , yes: function () {
+//layer.msg('确定')
+                $.ajax({
+                    type: "POST",
+                    url:"./edit",
+                    data: $(".layui-form").serialize(),
+                    success: function (r) {
+                        if (r.code == 0&&r.data==true) {
+                            parent.reLoad();
+                            location.reload();
+
+                        }
+                        else {
+                            layer.msg(r.msg)
+                        }
+                    },
+                    error: function () {
+                        layer.alert("出现错误");
+                        return false;
+                    }
+                }) //ajax结束
+            }
+            , btn2: function () {
+                layer.msg('取消')
+            }
+        });
+    });
+});
