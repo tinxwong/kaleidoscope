@@ -132,12 +132,16 @@
                         <div class="layui-inline">
                             <button class="layui-btn layui-btn-history" type="button">加载数据库表</button>
                         </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-search" type="button">数据库查询</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div th:include="create :: create_new"></div>
             <div th:include="update :: update_table"></div>
+            <div th:include="search :: search_db"></div>
 
 
         </div>
@@ -426,10 +430,12 @@
         $(document).on("click", ".layui-btn-create", function () {
             $(".layui-card-table-create").show();
             $(".layui-card-column-create").hide();
+            $(".layui-card-search-db").hide();
         });
 
         $(document).on("click", ".layui-btn-history", function () {
             $(".layui-card-table-create").hide();
+            $(".layui-card-search-db").hide();
             $(".layui-card-column-create").show();
             var databasename = $("#databasename").val();
             $.ajax({
@@ -452,6 +458,12 @@
                     }
                 }
             });
+        });
+
+        $(document).on("click", ".layui-btn-search", function () {
+            $(".layui-card-search-db").show();
+            $(".layui-card-table-create").hide();
+            $(".layui-card-column-create").hide();
         });
 
 

@@ -76,8 +76,8 @@ public class MpGenerator {
 
 
     public static void generator(DBMsg dbMsg){
-        String rootPath = "D://code-gen//"+dbMsg.getDatabasename()+"//"+dbMsg.getModel();
-        String packegeParent = String.format("com.xnew.%s.%s",dbMsg.getDatabasename(),dbMsg.getModel());
+        String rootPath = "C://code-gen//"+dbMsg.getDatabasename()+"//"+dbMsg.getModel();
+        String packageParent = String.format("com.xnew.%s.%s",dbMsg.getDatabasename(),dbMsg.getModel());
         AutoGenerator mpg = new AutoGenerator();
 
         Map<String,String> map = new HashMap<>();
@@ -161,7 +161,7 @@ public class MpGenerator {
 
         // 包配置
         XnewPackageConfig pc = new XnewPackageConfig();
-        pc.setParent(packegeParent);
+        pc.setParent(packageParent);
         pc.setController("controller");
         pc.setEntity("entity");
         pc.setService("service");
@@ -256,7 +256,7 @@ public class MpGenerator {
         focList.add(new FileOutConfig("/templates/ftl/controller.java.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String pkg = packegeParent.replace(".","//");
+                String pkg = packageParent.replace(".","//");
                 // 自定义输入文件名称
                 return String.format("%s//%s-console-backend//src//main//java//%s//controller//%sController.java",rootPath,dbMsg.getModel(),pkg,tableInfo.getEntityName());
             }
@@ -265,7 +265,7 @@ public class MpGenerator {
         focList.add(new FileOutConfig("/templates/ftl/serviceImpl.java.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String pkg = packegeParent.replace(".","//");
+                String pkg = packageParent.replace(".","//");
                 // 自定义输入文件名称
                 return String.format("%s//%s-implecation//src//main//java//%s//service//impl//%sServiceImpl.java",rootPath,dbMsg.getModel(),pkg,tableInfo.getEntityName());
             }
@@ -274,7 +274,7 @@ public class MpGenerator {
         focList.add(new FileOutConfig("/templates/ftl/mapper.java.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String pkg = packegeParent.replace(".","//");
+                String pkg = packageParent.replace(".","//");
                 // 自定义输入文件名称
                 return String.format("%s//%s-implecation//src//main//java//%s//mapper//%sMapper.java",rootPath,dbMsg.getModel(),pkg,tableInfo.getEntityName());
             }
@@ -283,7 +283,7 @@ public class MpGenerator {
         focList.add(new FileOutConfig("/templates/ftl/service.java.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String pkg = packegeParent.replace(".","//");
+                String pkg = packageParent.replace(".","//");
                 // 自定义输入文件名称
                 return String.format("%s//%s-interface//src//main//java//%s//service//%sService.java",rootPath,dbMsg.getModel(),pkg,tableInfo.getEntityName());
             }
@@ -292,7 +292,7 @@ public class MpGenerator {
         focList.add(new FileOutConfig("/templates/ftl/entity.java.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String pkg = packegeParent.replace(".","//");
+                String pkg = packageParent.replace(".","//");
                 // 自定义输入文件名称
                 return String.format("%s//%s-interface//src//main//java//%s//entity//%s.java",rootPath,dbMsg.getModel(),pkg,tableInfo.getEntityName());
             }
@@ -301,9 +301,9 @@ public class MpGenerator {
         focList.add(new FileOutConfig("/templates/ftl/entityVo.java.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String pkg = packegeParent.replace(".","//");
+                String pkg = packageParent.replace(".","//");
                 // 自定义输入文件名称
-                cfg.getMap().put("pkg",packegeParent);
+                cfg.getMap().put("pkg",packageParent);
                 return String.format("%s//%s-interface//src//main//java//%s//entity//vo//%sVo.java",rootPath,dbMsg.getModel(),pkg,tableInfo.getEntityName());
             }
         });
@@ -312,7 +312,7 @@ public class MpGenerator {
         focList.add(new FileOutConfig("/templates/ftl/entityQuery.java.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String pkg = packegeParent.replace(".","//");
+                String pkg = packageParent.replace(".","//");
                 // 自定义输入文件名称
                 return String.format("%s//%s-interface//src//main//java//%s//entity//query//%sQuery.java",rootPath,dbMsg.getModel(),pkg,tableInfo.getEntityName());
             }
@@ -323,7 +323,7 @@ public class MpGenerator {
             focList.add(new FileOutConfig("/templates/ftl/enum.java.vm") {
                 @Override
                 public String outputFile(TableInfo tableInfo) {
-                    String pkg = packegeParent.replace(".","//");
+                    String pkg = packageParent.replace(".","//");
                     // 自定义输入文件名称
                     String enumName = String.format("%s%sEnum",tableInfo.getEntityName(),parse(str));
                     System.out.println("enumName:"+enumName);
@@ -336,7 +336,7 @@ public class MpGenerator {
                         enumTypes.add(t);
                     }
                     cfg.getMap().put("types",enumTypes);
-                    cfg.getMap().put("pkg",packegeParent);
+                    cfg.getMap().put("pkg",packageParent);
                     return String.format("%s//%s-interface//src//main//java//%s//enums//%s%sEnum.java",rootPath,dbMsg.getModel(),pkg,tableInfo.getEntityName(),parse(str));
                 }
             });
@@ -345,7 +345,7 @@ public class MpGenerator {
 //        focList.add(new FileOutConfig("/templates/ftl/mapper.xml.vm") {
 //            @Override
 //            public String outputFile(TableInfo tableInfo) {
-//                String pkg = packegeParent.replace(".","//");
+//                String pkg = packageParent.replace(".","//");
 //                // 自定义输入文件名称
 //                return String.format("%s//implecation//%s//mapper//xml//%sMapper.xml",rootPath,pkg,tableInfo.getEntityName());
 //            }
