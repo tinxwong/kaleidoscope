@@ -354,7 +354,7 @@ public class DBGenService {
     public HashMap getSelectSearch(DBMsg dbMsg) {
         Connection connection = (Connection) MapUtils.getValue(dbMsg.getDatabasename());
         List<Column> columns = new ArrayList<>();
-        List<HashMap> rows = new ArrayList<>();
+        List<List> rows = new ArrayList<>();
         HashMap result = new HashMap();
         try {
             PreparedStatement ps = connection.prepareStatement(dbMsg.getSql());
@@ -371,10 +371,10 @@ public class DBGenService {
             }
             if (CollectionUtils.isNotEmpty(columns)) {
                 while (rs.next()) {
-                    HashMap row = new LinkedHashMap();
+                    List row = new ArrayList();
                     for (Column c : columns) {
                         String columnName = c.getName();
-                        row.put(columnName, rs.getString(columnName));
+                        row.add(rs.getString(columnName));
                     }
                     rows.add(row);
                 }

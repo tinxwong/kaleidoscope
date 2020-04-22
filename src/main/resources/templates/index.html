@@ -41,9 +41,10 @@
             height: 30px;
             width: 200px;
         }
-        .search_word{
-            height:30px;
-            width:30px;
+
+        .search_word {
+            height: 30px;
+            width: 30px;
         }
 
     </style>
@@ -249,7 +250,7 @@
                     parent.layer.alert("Connection error");
                 },
                 success: function (res) {
-                    if (res.code == 0&&res.data==true) {
+                    if (res.code == 0 && res.data == true) {
                         parent.layer.msg("操作成功");
 
                     } else {
@@ -460,13 +461,6 @@
             });
         });
 
-        $(document).on("click", ".layui-btn-search", function () {
-            $(".layui-card-search-db").show();
-            $(".layui-card-table-create").hide();
-            $(".layui-card-column-create").hide();
-        });
-
-
         $(document).on("click", ".layui-card-table-create .enums", function () {
             var id = $(this).attr('id');
             addOpen = layer.open({
@@ -481,10 +475,20 @@
             parseEnum(content);
         });
 
+        $(document).on("click", ".layui-btn-search", function () {
+            $(".layui-card-search-db").show();
+            $(".layui-card-table-create").hide();
+            $(".layui-card-column-create").hide();
+        });
+
+        $(document).on("click", ".search-sql-btn", function () {
+            searchSelect();
+        });
+
         /**
          * 生成代码
          **/
-        $(document).on("click",".gen-column-code",function () {
+        $(document).on("click", ".gen-column-code", function () {
             $("#mytablename").val(selectTableName);
             var params = $('.layui-form-connectionDB').serialize();
 
@@ -650,8 +654,8 @@
         /**
          * 为表添加字段，转为sql
          */
-        $(document).on("click",".layui-add-col",function () {
-            if(selectTableName==""){
+        $(document).on("click", ".layui-add-col", function () {
+            if (selectTableName == "") {
                 layer.alert("请选择数据表！");
                 return;
             }
@@ -660,10 +664,10 @@
         /**
          * 为数据表添加字段
          **/
-        $(document).on("click",".layui-exc-col",function(){
+        $(document).on("click", ".layui-exc-col", function () {
             var databaseName = $("#databasename").val();
             var sql = $("#col-sql").val();
-            if(sql==''){
+            if (sql == '') {
                 layer.alert("SQL语句为空！");
                 return;
             }
@@ -671,17 +675,17 @@
                 cache: true,
                 type: "post",
                 url: "/xnew/tools/addTableColumnBySql",
-                data: {"databaseName":databaseName,"tableName":selectTableName,"sql":sql},// 你的formid
+                data: {"databaseName": databaseName, "tableName": selectTableName, "sql": sql},// 你的formid
                 async: false,
                 error: function (res) {
                     alert(JSON.stringify(res));
                 },
                 success: function (res) {
-                    if (res.code == 0&&res.data==true) {
+                    if (res.code == 0 && res.data == true) {
                         var index = layer.alert('添加成功！', {
                             skin: 'layui-layer-molv' //样式类名
-                            ,closeBtn: 0
-                        }, function(){
+                            , closeBtn: 0
+                        }, function () {
                             loadTableColumn(selectTableName);
                             layer.close(index);
                         });
@@ -693,25 +697,25 @@
         /**
          * 删除数据表的字段
          **/
-        $(document).on("click",".layui-btn-column",function(){
+        $(document).on("click", ".layui-btn-column", function () {
             var databaseName = $("#databasename").val();
             var column = $(this).closest("tr").find(".column-field-name").text();
-            layer.confirm('真的删除字段么？',function () {
+            layer.confirm('真的删除字段么？', function () {
                 $.ajax({
                     cache: true,
                     type: "post",
                     url: "/xnew/tools/dropTableColumn",
-                    data: {"databaseName":databaseName,"tableName":selectTableName,"column":column},// 你的formid
+                    data: {"databaseName": databaseName, "tableName": selectTableName, "column": column},// 你的formid
                     async: false,
                     error: function (res) {
                         alert(JSON.stringify(res));
                     },
                     success: function (res) {
-                        if (res.code == 0&&res.data==true) {
+                        if (res.code == 0 && res.data == true) {
                             var index = layer.alert('删除成功！', {
                                 skin: 'layui-layer-molv' //样式类名
-                                ,closeBtn: 0
-                            }, function(){
+                                , closeBtn: 0
+                            }, function () {
                                 loadTableColumn(selectTableName);
                                 layer.close(index);
                             });
@@ -725,9 +729,9 @@
         /**
          * 添加表字段的sql语句
          */
-        function addColumnSql(obj){
+        function addColumnSql(obj) {
             var $form = $(obj).closest("form");
-            var sql = "alter table "+selectTableName+" add column "+$form.find(".col-name").val();
+            var sql = "alter table " + selectTableName + " add column " + $form.find(".col-name").val();
             var type = $form.find(".col-fieldtype").val();
             var length = $form.find(".col-length").val();
             var comment = $form.find(".col-comment").val();
@@ -736,25 +740,25 @@
             var ifNull = $form.find(".col-ifNull").val();
 
 
-            if(length!=""){
-                type = type+"("+length+")";
+            if (length != "") {
+                type = type + "(" + length + ")";
             }
-            sql += " "+type;
-            if(dft!=""){
-                sql += " default "+dft;
-            }else{
-                if(ifNull==0){
+            sql += " " + type;
+            if (dft != "") {
+                sql += " default " + dft;
+            } else {
+                if (ifNull == 0) {
                     sql += " default null";
-                }else{
+                } else {
                     sql += " not null";
                 }
 
             }
-            if(comment!=""){
-                sql += " comment '"+comment+"'";
+            if (comment != "") {
+                sql += " comment '" + comment + "'";
             }
-            if(after!=""&&after!="排位"){
-                sql += " after "+after;
+            if (after != "" && after != "排位") {
+                sql += " after " + after;
             }
             $("#col-sql").val(sql);
         }
@@ -768,7 +772,7 @@
          * 加载选中表的字段
          * @param selectTableName
          */
-        function loadTableColumn(selectTableName){
+        function loadTableColumn(selectTableName) {
             var databasename = $("#databasename").val();
             $.ajax({
                 cache: true,
@@ -804,28 +808,28 @@
             });
         }
 
-        $(document).on("click",".delete-table",function () {
-            if(selectTableName==""){
+        $(document).on("click", ".delete-table", function () {
+            if (selectTableName == "") {
                 layer.alert("请选择要删除的表！");
                 return;
             }
-            layer.confirm('真的删除数据表么？',function () {
+            layer.confirm('真的删除数据表么？', function () {
                 var databaseName = $("#databasename").val();
                 $.ajax({
                     cache: true,
                     type: "post",
                     url: "/xnew/tools/dropTable",
-                    data: {"databaseName":databaseName,"tableName":selectTableName},// 你的formid
+                    data: {"databaseName": databaseName, "tableName": selectTableName},// 你的formid
                     async: false,
                     error: function (res) {
                         alert(JSON.stringify(res));
                     },
                     success: function (res) {
-                        if (res.code == 0&&res.data==true) {
+                        if (res.code == 0 && res.data == true) {
                             var index = layer.alert('删除成功！', {
                                 skin: 'layui-layer-molv' //样式类名
-                                ,closeBtn: 0
-                            }, function(){
+                                , closeBtn: 0
+                            }, function () {
                                 loadTableColumn(selectTableName);
                                 layer.close(index);
                             });
@@ -834,6 +838,52 @@
                 });
             });
         });
+
+        function searchSelect() {
+            $("#layui-tr-columns").html("");
+            $("#layui-tr-rows").html("");
+            var params = $('.layui-form-connectionDB').serialize();
+            var sql = $('#search-sql').val();
+            params += "&sql=" + sql;
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: "/xnew/tools/getSelectSearch",
+                data: params,// 你的formid
+                async: false,
+                error: function (res) {
+                    alert(JSON.stringify(res));
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+                        var datas = res.data;
+                        var columns = datas.columns;
+                        var rows = datas.rows;
+                        var headHtml = "";
+                        var bodyHtml = "";
+                        if (columns != null){
+                            headHtml +="<tr>";
+                            for (let i = 0; i < columns.length; i++) {
+                                headHtml +="<th>" + columns[i].name + "</th>";
+                            }
+                            headHtml +="</tr>";
+                        }
+                        if (rows != null){
+                            for (let n = 0; n < rows.length; n++) {
+                                bodyHtml +="<tr>";debugger
+                                var row = rows[n];
+                                for (let j = 0; j < row.length; j++) {
+                                    bodyHtml +="<td>" + row[j] + "</td>";
+                                }
+                                bodyHtml +="</tr>";
+                            }
+                        }
+                        $("#layui-tr-columns").append(headHtml);
+                        $("#layui-tr-rows").append(bodyHtml);
+                    }
+                }
+            });
+        }
     });
 
     function delTr(obj) {
@@ -888,6 +938,8 @@
     function delEnumsTr(obj) {
         layui.$(obj).closest(".layui-col-space10").remove();
     }
+
+
 </script>
 </body>
 </html>

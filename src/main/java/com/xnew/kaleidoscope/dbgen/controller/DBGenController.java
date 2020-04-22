@@ -88,4 +88,10 @@ public class DBGenController {
     public Response dropTable(String databaseName,String tableName){
         return new Response(dbGenService.dropTable(databaseName,tableName));
     }
+
+    @RequestMapping(value = "/getSelectSearch",method = RequestMethod.POST)
+    @ResponseBody
+    public Response getSelectSearch(DBMsg dbMsg){
+        return new Response(dbGenService.getSelectSearch(dbMsg));
+    }
 }
